@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const unsigned ARRAY_SIZE     = 30000;
-const char INITIAL_CELL_VALUE = 0;
+#define ARRAY_SIZE              30000
+#define INITIAL_CELL_VALUE      0
 
-const char INCREMENT_POINTER = '>';
-const char DECREMENT_POINTER = '<';
-const char INCREMENT_VALUE   = '+';
-const char DECREMENT_VALUE   = '-';
-const char OUTPUT_VALUE      = '.';
-const char INPUT_VALUE       = ',';
-const char BEGIN_LOOP        = '[';
-const char END_LOOP          = ']';
+#define INCREMENT_POINTER       '>'
+#define DECREMENT_POINTER       '<'
+#define INCREMENT_VALUE         '+'
+#define DECREMENT_VALUE         '-'
+#define OUTPUT_VALUE            '.'
+#define INPUT_VALUE             ','
+#define BEGIN_LOOP              '['
+#define END_LOOP                ']'
 
 void print_intro_message()
 {
