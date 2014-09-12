@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 #define ARRAY_SIZE              30000
-#define INITIAL_CELL_VALUE      0
+#define INPUT_SIZE              1024
 
 #define INCREMENT_POINTER       '>'
 #define DECREMENT_POINTER       '<'
@@ -15,32 +14,67 @@
 
 void print_intro_message()
 {
-    puts("Input your brainfuck code below and hit the enter key when done:");
+    puts("Input your brainfuck code below.");
 }
 
-void initialize_cells(char cells[])
+void read_input(char input[])
 {
-    for (unsigned i = 0; i < ARRAY_SIZE; ++i)
-    {
-        cells[i] = INITIAL_CELL_VALUE;
-    }
-}
-
-void parse_input(char cells[])
-{
+    unsigned current_char_index = 0;
     char current_char = EOF;
     while ((current_char = getchar()) != EOF)
     {
+        if (current_char_index == INPUT_SIZE - 1)
+        {
+            puts("Error: Maximum input size exceeded.");
+            input[current_char_index] = '\0';
+        }
+        else
+        {
+            input[current_char_index++] = current_char;
+        }
     }
 }
 
 int main()
 {
-    char cells[ARRAY_SIZE];
+    char cells[ARRAY_SIZE] = { 0 };
+    char input[INPUT_SIZE] = { 0 };
+
+    unsigned pointer = 0;
 
     print_intro_message();
-    initialize_cells(cells);
-    parse_input(cells);
+    read_input(input);
 
-    return EXIT_SUCCESS;
+    for (int i = 0; input[i] != '\0'; ++i)
+    {
+        switch (input[i])
+        {
+            case INCREMENT_POINTER:
+                ++pointer;
+                break;
+            case DECREMENT_POINTER:
+                --pointer;
+                break;
+            case INCREMENT_VALUE:
+                ++cells[pointer];
+                break;
+            case DECREMENT_VALUE:
+                --cells[pointer];
+                break;
+            case OUTPUT_VALUE:
+                printf("%c", cells[pointer]);
+                break;
+            case INPUT_VALUE:
+                cells[pointer] = getchar();
+                break;
+            case BEGIN_LOOP:
+                /* TODO */
+                break;
+            case END_LOOP:
+                /* TODO */
+                break;
+        }
+    }
+
+    return 0;
 }
