@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 #define ARRAY_SIZE              30000
 #define INPUT_SIZE              1024
@@ -45,6 +46,9 @@ int main()
     print_intro_message();
     read_input(input);
 
+    bool in_loop = false;
+    unsigned loop_start = 0;
+
     for (int i = 0; input[i] != '\0'; ++i)
     {
         switch (input[i])
@@ -62,16 +66,18 @@ int main()
                 --cells[pointer];
                 break;
             case OUTPUT_VALUE:
-                printf("%c", cells[pointer]);
+                putchar(cells[pointer]);
                 break;
             case INPUT_VALUE:
                 cells[pointer] = getchar();
                 break;
+
+            /* NOTE: Nested looping is not supported yet. */
             case BEGIN_LOOP:
-                /* TODO */
+                loop_start = i;
                 break;
             case END_LOOP:
-                /* TODO */
+                i = (cells[pointer] != 0) ? loop_start : i;
                 break;
         }
     }
