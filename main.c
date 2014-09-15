@@ -46,8 +46,7 @@ int main()
     print_intro_message();
     read_input(input);
 
-    bool in_loop = false;
-    unsigned loop_start = 0;
+    unsigned parens = 0;
 
     for (int i = 0; input[i] != '\0'; ++i)
     {
@@ -72,8 +71,39 @@ int main()
                 cells[pointer] = getchar();
                 break;
             case BEGIN_LOOP:
+                parens = 1;
+                if (cells[pointer] == 0)
+                {
+                    do
+                    {
+                        ++i;
+                        if (input[i] == BEGIN_LOOP)
+                        {
+                            ++parens;
+                        }
+                        else if (input[i] == END_LOOP)
+                        {
+                            --parens;
+                        }
+                    }
+                    while (parens != 0);
+                }
                 break;
             case END_LOOP:
+                parens = 0;
+                do
+                {
+                    if (input[i] == BEGIN_LOOP)
+                    {
+                        ++parens;
+                    }
+                    else if (input[i] == END_LOOP)
+                    {
+                        --parens;
+                    }
+                    --i;
+                }
+                while (parens != 0);
                 break;
         }
     }
