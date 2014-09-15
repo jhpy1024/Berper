@@ -13,6 +13,13 @@
 #define BEGIN_LOOP              '['
 #define END_LOOP                ']'
 
+char cells[ARRAY_SIZE] = { 0 };
+char input[INPUT_SIZE] = { 0 };
+
+unsigned pointer = 0;
+unsigned num_parens = 0;
+unsigned input_index = 0;
+
 void print_intro_message()
 {
     puts("Input your brainfuck code below.");
@@ -36,74 +43,107 @@ void read_input(char input[])
     }
 }
 
+void increment_pointer()
+{
+    ++pointer;
+}
+
+void decrement_pointer()
+{
+    --pointer;
+}
+
+void increment_value()
+{
+    ++cells[pointer];
+}
+
+void decrement_value()
+{
+    --cells[pointer];
+}
+
+void output_value()
+{
+    putchar(cells[pointer]);
+}
+
+void input_value()
+{
+    cells[pointer] = getchar();
+}
+
+void begin_loop()
+{
+    num_parens = 1;
+    if (cells[pointer] == 0)
+    {
+        do
+        {
+            ++input_index;
+            if (input[input_index] == BEGIN_LOOP)
+            {
+                ++num_parens;
+            }
+            else if (input[input_index] == END_LOOP)
+            {
+                --num_parens;
+            }
+        }
+        while (num_parens != 0);
+    }
+}
+
+void end_loop()
+{
+    num_parens = 0;
+    do
+    {
+        if (input[input_index] == BEGIN_LOOP)
+        {
+            ++num_parens;
+        }
+        else if (input[input_index] == END_LOOP)
+        {
+            --num_parens;
+        }
+        --input_index;
+    }
+    while (num_parens != 0);
+}
+
 int main()
 {
-    char cells[ARRAY_SIZE] = { 0 };
-    char input[INPUT_SIZE] = { 0 };
-
-    unsigned pointer = 0;
-
     print_intro_message();
     read_input(input);
 
-    unsigned parens = 0;
-
-    for (int i = 0; input[i] != '\0'; ++i)
+    for (input_index = 0; input[input_index] != '\0'; ++input_index)
     {
-        switch (input[i])
+        switch (input[input_index])
         {
             case INCREMENT_POINTER:
-                ++pointer;
+                increment_pointer();
                 break;
             case DECREMENT_POINTER:
-                --pointer;
+                decrement_pointer();
                 break;
             case INCREMENT_VALUE:
-                ++cells[pointer];
+                increment_value();
                 break;
             case DECREMENT_VALUE:
-                --cells[pointer];
+                decrement_value();
                 break;
             case OUTPUT_VALUE:
-                putchar(cells[pointer]);
+                output_value();
                 break;
             case INPUT_VALUE:
-                cells[pointer] = getchar();
+                input_value();
                 break;
             case BEGIN_LOOP:
-                parens = 1;
-                if (cells[pointer] == 0)
-                {
-                    do
-                    {
-                        ++i;
-                        if (input[i] == BEGIN_LOOP)
-                        {
-                            ++parens;
-                        }
-                        else if (input[i] == END_LOOP)
-                        {
-                            --parens;
-                        }
-                    }
-                    while (parens != 0);
-                }
+                begin_loop();
                 break;
             case END_LOOP:
-                parens = 0;
-                do
-                {
-                    if (input[i] == BEGIN_LOOP)
-                    {
-                        ++parens;
-                    }
-                    else if (input[i] == END_LOOP)
-                    {
-                        --parens;
-                    }
-                    --i;
-                }
-                while (parens != 0);
+                end_loop();
                 break;
         }
     }
