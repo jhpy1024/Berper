@@ -71,13 +71,9 @@ int main()
             case INPUT_VALUE:
                 cells[pointer] = getchar();
                 break;
-
-            /* NOTE: Nested looping is not supported yet. */
             case BEGIN_LOOP:
-                loop_start = i;
                 break;
             case END_LOOP:
-                i = (cells[pointer] != 0) ? loop_start : i;
                 break;
         }
     }
